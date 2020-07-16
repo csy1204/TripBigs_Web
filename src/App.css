@@ -1,4 +1,4 @@
-.App {
+/* .App {
   text-align: center;
 }
 
@@ -36,4 +36,52 @@
   100% {
     transform: translateY(0px)
   }
+} */
+
+@import '~antd/dist/antd.css';
+
+
+/* #components-layout-demo-fixed .logo {
+  width: 120px;
+  height: 31px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 16px 24px 16px 0;
+  float: left;
+}
+.site-layout .site-layout-background {
+  background: #fff;
+} */
+
+.ant-layout-header {
+  background: #fff;
+}
+
+.site-layout-content {
+  /* background: #fff; */
+  max-width: 980px;
+  min-height: 280px;
+}
+.logo {
+  /* width: 120px;
+  height: 31px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 16px 24px 16px 0; */
+  float: left;
+}
+.ant-tabs-nav-list {
+  width: 100%;
+}
+
+.ant-tabs-nav {
+  margin: 0;
+}
+
+.ant-tabs-tab {
+  padding: 12px 13%;
+  width: 33%;
+  margin: 0;
+}
+
+.slick-prev:before, .slick-next:before {
+  color: black;
 }

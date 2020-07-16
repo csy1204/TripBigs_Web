@@ -1,12 +1,40 @@
 import React, { useState, useEffect } from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
 import './App.css';
+import ReactGA from "react-ga";
+import { Layout, Menu, Row, Col, Button, Dropdown } from 'antd';
+import {
+  FilterOutlined
+} from '@ant-design/icons';
+import HotelList from "./features/hotels/HotelList"
+
+
+const { Header, Content, Footer } = Layout;
+
+const menu = (
+  <Menu>
+    <Menu.Item>
+      <a target="_blank" rel="noopener noreferrer" href="http://www.alipay.com/">
+        1st menu item
+      </a>
+    </Menu.Item>
+    <Menu.Item>
+      <a target="_blank" rel="noopener noreferrer" href="http://www.taobao.com/">
+        2nd menu item
+      </a>
+    </Menu.Item>
+    <Menu.Item>
+      <a target="_blank" rel="noopener noreferrer" href="http://www.tmall.com/">
+        3rd menu item
+      </a>
+    </Menu.Item>
+  </Menu>
+);
 
 function App() {
   const [currentTime, setCurrentTime] = useState(0);
 
   useEffect(() => {
+    ReactGA.pageview(window.location.pathname)
     fetch('/time').then(res => res.json()).then(data => {
       setCurrentTime(data.time);
     });
@@ -14,52 +42,31 @@ function App() {
 
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <p>The current time is {currentTime}.</p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
+      <Layout>
+        <Header style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
+          <div className="logo" />
+          <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
+            <Menu.Item key="1">nav 1</Menu.Item>
+            <Menu.Item key="2">nav 2</Menu.Item>
+            <Menu.Item key="3">nav 3</Menu.Item>
+          </Menu>
+        </Header>
+        <Row>
+          <Col xs={{ span: 24, offset: 0 }} lg={{ span: 16, offset: 4 }} xl={{ span: 12, offset: 6 }}>
+            <Content className="site-layout" style={{ padding: '0 30px', marginTop: 64, minHeight: "100vh" }}>
+            <div style={{ padding: "10px 0px" }}>
+            <Dropdown overlay={menu} placement="bottomLeft">
+              <Button icon={<FilterOutlined />}>정렬</Button>
+            </Dropdown>
+            </div>
+            <div className="site-layout-background" style={{ padding: "10px 0px", minHeight: 380 }}>
+              <HotelList />
+            </div>
+          </Content>
+          </Col>
+        </Row>
+        <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
+      </Layout>
     </div>
   );
 }

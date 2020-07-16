@@ -6,10 +6,24 @@ import store from './app/store';
 import { Provider } from 'react-redux';
 import * as serviceWorker from './serviceWorker';
 
+import ReactGA from "react-ga";
+import {createBrowserHistory} from 'history';
+import { Router } from 'react-router-dom';
+
+ReactGA.initialize("UA-172543155-1"); 
+const history = createBrowserHistory()
+
+history.listen(location => {
+    ReactGA.set({ page: location.pathname })
+    ReactGA.pageview(location.pathname)
+})
+
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <App />
+      <Router history={history}>
+        <App />
+      </Router>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')
