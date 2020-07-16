@@ -62,38 +62,41 @@ const HotelCard = ({hotel}) => {
     const [tabNum, setTabNum] = useState(false);
     const { TabPane } = Tabs;
 
+    const handleTabChange = (key) => {
+        key==tabNum?setTabNum(false):setTabNum(key)
+    }
+
     return (
         <HotelCardDiv>
             <Row style={{background:"white"}}>
-                <Col xs={10} lg={8} style={{padding:"2px"}}>
+                <Col xs={10} lg={4} style={{padding:"2px"}} onClick={() => handleTabChange("2")} >
                     <HotelImage alt={"placeholder"} src={"http:"+hotel.images[0].urls.preview} />
                 </Col>
-                <Col xs={14} lg={16} >
+                <Col xs={14} lg={20} >
                     <NameSpan>{hotel.name}</NameSpan>
-
                     <p style={{fontSize:12}}>{hotel.type}</p>
 
-                    <p onClick={() => setTabNum("3")} style={{fontSize:12, marginBottom: 2}}>
+                    <p onClick={() => handleTabChange("3")} style={{fontSize:12, marginBottom: 2}}>
                         <RatingSpan index={hotel.reviewRating.index}> 
                             {hotel.reviewRating.percentage} 
                         </RatingSpan>  
                         <b>{hotel.overallLiking}</b> (후기 {hotel.partnerReviewCount}개)
                     </p>
-                    <p onClick={() => setTabNum("2")} style={{fontSize:12, marginBottom: 2}}>
+                    <p onClick={() => handleTabChange("1")} style={{fontSize:12, marginBottom: 2}}>
                         {hotel.address.street}
                     </p>
-                    <BestDealCard>
+                    <BestDealCard onClick={() => handleTabChange("3")}>
                         <b>아고다</b>
                         <h3 style={{color:"#316300", fontWeight: 700, fontSize:14, marginBottom: 2}}>{hotel.price} 원</h3>
                     </BestDealCard>
                 </Col>
             </Row>
             {tabNum ?
-            <Row onClick={() => setTabNum(false)} style={{background:"white", justifyContent: "flex-end", padding: "3px"}}>
-                <UpOutlined/>
-            </Row>:<Row onClick={() => setTabNum("1")}  style={{background:"white", justifyContent: "flex-end", padding: "3px"}}>
-                <DownOutlined />
-            </Row>   
+                <Row onClick={() => setTabNum(false)} style={{background:"white", justifyContent: "flex-end", padding: "3px"}}>
+                    <UpOutlined/>
+                </Row>:<Row onClick={() => setTabNum("1")}  style={{background:"white", justifyContent: "flex-end", padding: "3px"}}>
+                    <DownOutlined />
+                </Row>   
             }
             <Divider style={{width: '100%', margin: 0}} />
             <Row style={{background:"white"}}>
