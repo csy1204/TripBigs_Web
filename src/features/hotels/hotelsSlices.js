@@ -111,13 +111,15 @@ import get from 'lodash/get'
 //  'price': 100000}
 
 
+
+// Hotel List Sorting Function
 const sortFunction = (state, key, isAsec) => {
-    const ascVar = isAsec === true ? 1 : -1
+    const ascVar = isAsec === true ? -1 : 1;
     return state.hotelList.slice().sort((a, b)=> {
-        if (a.reviewRating.percentage < b.reviewRating.percentage) {
+        if (get(a,key) < get(b,key)) {
             return 1 * ascVar;
         }
-        if (a.reviewRating.percentage > b.reviewRating.percentage) {
+        if (get(a,key) > get(b,key)) {
             return -1 * ascVar;
         }
         return 0;
@@ -134,28 +136,12 @@ const hotelsSlice = createSlice({
   reducers: {
     sortByPrice(state, action) {
         return {...state,
-            hotelList: state.hotelList.slice().sort((a, b)=> {
-                if (a.price < b.price) {
-                    return -1;
-                }
-                else if (a.price > b.price) {
-                    return 1;
-                }
-                return 0;
-            })
+            hotelList: sortFunction(state, "price", true)
         }
     },
     sortByRating(state, action) {
         return {...state,
-            hotelList: state.hotelList.slice().sort((a, b)=> {
-                if (a.reviewRating.percentage < b.reviewRating.percentage) {
-                    return 1;
-                }
-                if (a.reviewRating.percentage > b.reviewRating.percentage) {
-                    return -1;
-                }
-                return 0;
-            })
+            hotelList: sortFunction(state, "reviewRating.percentage", false)
         }
     }
   },
