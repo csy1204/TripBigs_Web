@@ -39,8 +39,24 @@ const HotelCardDiv = styled.div`
 
 const BestDealCard = styled.div`
     background-color: #ecf3e6;
-    height: calc(100% - (124px));
 `;
+
+const NameSpan = styled.span`
+    margin: 0 0 8px;
+    font-size: 14px;
+    font-weight: 800;
+    line-height: 1.25;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    cursor: pointer;
+`
+
+const HotelImage = styled.img`
+    object-fit: cover;
+    width: 100%;
+    height: 100%
+`
 
 const HotelCard = ({hotel}) => {
     const [tabNum, setTabNum] = useState(false);
@@ -50,25 +66,25 @@ const HotelCard = ({hotel}) => {
         <HotelCardDiv>
             <Row style={{background:"white"}}>
                 <Col xs={10} lg={8} style={{padding:"2px"}}>
-                    <img alt={"placeholder"} width={"100%"} src={"http:"+hotel.images[0].urls.preview} />
+                    <HotelImage alt={"placeholder"} src={"http:"+hotel.images[0].urls.preview} />
                 </Col>
                 <Col xs={14} lg={16} >
-                    <h3>{hotel.name}</h3>
+                    <NameSpan>{hotel.name}</NameSpan>
 
                     <p style={{fontSize:12}}>{hotel.type}</p>
 
-                    <p onClick={() => setTabNum("3")} style={{fontSize:12}}>
+                    <p onClick={() => setTabNum("3")} style={{fontSize:12, marginBottom: 2}}>
                         <RatingSpan index={hotel.reviewRating.index}> 
                             {hotel.reviewRating.percentage} 
                         </RatingSpan>  
-                        {hotel.overallLiking} (후기 {hotel.partnerReviewCount}개)
+                        <b>{hotel.overallLiking}</b> (후기 {hotel.partnerReviewCount}개)
                     </p>
-                    <p onClick={() => setTabNum("2")} style={{fontSize:12}}>
+                    <p onClick={() => setTabNum("2")} style={{fontSize:12, marginBottom: 2}}>
                         {hotel.address.street}
                     </p>
                     <BestDealCard>
-                        아고다
-                        <h3 style={{color:"#316300", fontSize:20}}>{hotel.price} 원</h3>
+                        <b>아고다</b>
+                        <h3 style={{color:"#316300", fontWeight: 700, fontSize:14, marginBottom: 2}}>{hotel.price} 원</h3>
                     </BestDealCard>
                 </Col>
             </Row>

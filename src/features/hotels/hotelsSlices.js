@@ -114,16 +114,20 @@ import initialHotelsState from './initialState'
 const hotelsSlice = createSlice({
   name: 'hotels',
   initialState: initialHotelsState,
-//   reducers: {
-//     sortByPrice(state, action) {
-//       state.find(todo => todo.id === action.payload)
-//     }
-//   }
+  reducers: {
+    sortByPrice(state, action) {
+        state.sort((a, b)=> a.price > b.price)
+    },
+    sortByRating(state, action) {
+        console.log(state);
+        console.log("sort!");
+        state.slice().sort((a, b)=> a.reviewRating.percentage > b.reviewRating.percentage)
+        // console.log(state.sort((a, b)=> a.reviewRating.percentage > b.reviewRating.percentage).toJS());
+        // return 
+    }
+  }
 })
 
-// export const { addTodo, toggleTodo } = hotelsSlice.actions
+export const { sortByPrice, sortByRating } = hotelsSlice.actions
 
 export default hotelsSlice.reducer
-
-
-

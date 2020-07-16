@@ -1,29 +1,26 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { v4 as uuidv4 } from 'uuid';
 
 export const trackerSlice = createSlice({
   name: 'counter',
-  initialState: {
-    value: 0,
-  },
-  reducers: {
-    increment: state => {
-      // Redux Toolkit allows us to write "mutating" logic in reducers. It
-      // doesn't actually mutate the state because it uses the Immer library,
-      // which detects changes to a "draft state" and produces a brand new
-      // immutable state based off those changes
-      state.value += 1;
-    },
-    decrement: state => {
-      state.value -= 1;
-    },
-    incrementByAmount: (state, action) => {
-      state.value += action.payload;
-    },
-  },
+  initialState: [
+    {'user_id': '0A2TX0JNYVQ6',
+    'session_id': uuidv4(),
+    'timestamp': 1595085060,
+    'step': 1,
+    'action_type': 'clickout item',
+    'reference': '10091602',
+    'platform': 'KR',
+    'city': 'Seoul, South Korea',
+    'device': 'desktop',
+    'current_filters': null,
+    'impressions': '2802232|2733571|5477718|155374|155465|3549258|10091602|6508748|844336|4638538|3501450|390361|3501452|363046|2555968|5197174|4773608|3171165|3954788|6833196|5645106|475256|1627467|4871108|9033886',
+    'prices': '124|176|99|220|191|127|85|54|83|268|78|144|96|78|77|154|135|85|74|115|152|131|83|108|79'}
+  ],
 });
 
-export const { increment, decrement, incrementByAmount } = trackerSlice.actions;
+// export const { increment, decrement, incrementByAmount } = trackerSlice.actions;
 
-export const selectCount = state => state.counter.value;
+// export const selectCount = state => state.counter.value;
 
 export default trackerSlice.reducer;

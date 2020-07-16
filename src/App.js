@@ -3,32 +3,13 @@ import './App.css';
 import ReactGA from "react-ga";
 import { Layout, Menu, Row, Col, Button, Dropdown } from 'antd';
 import {
-  FilterOutlined
+  RightOutlined
 } from '@ant-design/icons';
 import HotelList from "./features/hotels/HotelList"
+import SortingButton from "./features/hotels/SortingButton"
 
 
 const { Header, Content, Footer } = Layout;
-
-const menu = (
-  <Menu>
-    <Menu.Item>
-      <a target="_blank" rel="noopener noreferrer" href="http://www.alipay.com/">
-        1st menu item
-      </a>
-    </Menu.Item>
-    <Menu.Item>
-      <a target="_blank" rel="noopener noreferrer" href="http://www.taobao.com/">
-        2nd menu item
-      </a>
-    </Menu.Item>
-    <Menu.Item>
-      <a target="_blank" rel="noopener noreferrer" href="http://www.tmall.com/">
-        3rd menu item
-      </a>
-    </Menu.Item>
-  </Menu>
-);
 
 function App() {
   const [currentTime, setCurrentTime] = useState(0);
@@ -55,9 +36,8 @@ function App() {
           <Col xs={{ span: 24, offset: 0 }} lg={{ span: 16, offset: 4 }} xl={{ span: 12, offset: 6 }}>
             <Content className="site-layout" style={{ padding: '0 30px', marginTop: 64, minHeight: "100vh" }}>
             <div style={{ padding: "10px 0px" }}>
-            <Dropdown overlay={menu} placement="bottomLeft">
-              <Button icon={<FilterOutlined />}>정렬</Button>
-            </Dropdown>
+            <SortingButton />
+            <Button> AI 추천 순 정렬 <RightOutlined /> </Button>
             </div>
             <div className="site-layout-background" style={{ padding: "10px 0px", minHeight: 380 }}>
               <HotelList />
