@@ -33,6 +33,8 @@ const RatingSpan = styled.span`
     border-radius: 18px;
 `;
 
+
+
 const HotelCardDiv = styled.div`
     margin-bottom: 10px;    
 `;
@@ -58,16 +60,16 @@ const HotelImage = styled.img`
     height: 100%
 `
 
-const HotelCard = ({hotel}) => {
+const HotelCard = ({hotel, delay}) => {
     const [tabNum, setTabNum] = useState(false);
     const { TabPane } = Tabs;
 
     const handleTabChange = (key) => {
-        key==tabNum?setTabNum(false):setTabNum(key)
+        key===tabNum?setTabNum(false):setTabNum(key)
     }
 
     return (
-        <HotelCardDiv>
+        <HotelCardDiv className={'animate__animated animate__fadeInUp'}>
             <Row style={{background:"white"}}>
                 <Col xs={10} lg={4} style={{padding:"2px"}} onClick={() => handleTabChange("2")} >
                     <HotelImage alt={"placeholder"} src={"http:"+hotel.images[0].urls.preview} />
@@ -75,7 +77,6 @@ const HotelCard = ({hotel}) => {
                 <Col xs={14} lg={20} >
                     <NameSpan>{hotel.name}</NameSpan>
                     <p style={{fontSize:12}}>{hotel.type}</p>
-
                     <p onClick={() => handleTabChange("3")} style={{fontSize:12, marginBottom: 2}}>
                         <RatingSpan index={hotel.reviewRating.index}> 
                             {hotel.reviewRating.percentage} 
@@ -101,7 +102,7 @@ const HotelCard = ({hotel}) => {
             <Divider style={{width: '100%', margin: 0}} />
             <Row style={{background:"white"}}>
                 {tabNum && 
-                <Tabs style={{width: '100%'}} defaultActiveKey="1" activeKey={tabNum} onChange={(key)=>key==tabNum?setTabNum(false):setTabNum(key)}>
+                <Tabs style={{width: '100%'}} defaultActiveKey="1" activeKey={tabNum} onChange={(key)=>handleTabChange(key)}>
                     <TabPane tab="  정보   " key="1" style={{padding: "6px"}}>
                         <InfoTab hname={hotel.name} hid={hotel.id} amenities={hotel.amenities}  />
                     </TabPane>

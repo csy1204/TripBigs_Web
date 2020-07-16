@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit'
 import initialHotelsState from './initialState'
-
+import get from 'lodash/get'
 
 // {'id': 10091602,
 //  'name': '그레이스리 호텔 서울',
@@ -111,23 +111,66 @@ import initialHotelsState from './initialState'
 //  'price': 100000}
 
 
+const sortFunction = (state, key, isAsec) => {
+    const ascVar = isAsec === true ? 1 : -1
+    return state.hotelList.slice().sort((a, b)=> {
+        if (a.reviewRating.percentage < b.reviewRating.percentage) {
+            return 1 * ascVar;
+        }
+        if (a.reviewRating.percentage > b.reviewRating.percentage) {
+            return -1 * ascVar;
+        }
+        return 0;
+    })
+}
+
+
 const hotelsSlice = createSlice({
   name: 'hotels',
-  initialState: initialHotelsState,
+  initialState: {
+      hotelList: initialHotelsState,
+      filter: null,
+  },
   reducers: {
     sortByPrice(state, action) {
-        state.sort((a, b)=> a.price > b.price)
+        return {...state,
+            hotelList: state.hotelList.slice().sort((a, b)=> {
+                if (a.price < b.price) {
+                    return -1;
+                }
+                else if (a.price > b.price) {
+                    return 1;
+                }
+                return 0;
+            })
+        }
     },
     sortByRating(state, action) {
-        console.log(state);
-        console.log("sort!");
-        state.slice().sort((a, b)=> a.reviewRating.percentage > b.reviewRating.percentage)
-        // console.log(state.sort((a, b)=> a.reviewRating.percentage > b.reviewRating.percentage).toJS());
-        // return 
+        return {...state,
+            hotelList: state.hotelList.slice().sort((a, b)=> {
+                if (a.reviewRating.percentage < b.reviewRating.percentage) {
+                    return 1;
+                }
+                if (a.reviewRating.percentage > b.reviewRating.percentage) {
+                    return -1;
+                }
+                return 0;
+            })
+        }
     }
+  },
+  extraReducers: {
+      "SORT_BY_RATING": (state, action) => {
+          return state.hotelList.slice().sort((a, b)=> a.reviewRating.percentage > b.reviewRating.percentage);
+      }
   }
 })
 
-export const { sortByPrice, sortByRating } = hotelsSlice.actions
+export const { sortByPrice, sortByRating } = hotelsSlice.actions;
+console.log("aaa", initialHotelsState.map((h) => h.name));
+
+console.log(get(initialHotelsState[0], "reviewRating.percentage"))
+
+export const selectHotelList = state => state.hotelList;
 
 export default hotelsSlice.reducer

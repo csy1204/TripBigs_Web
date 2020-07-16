@@ -1,19 +1,24 @@
 import React, { useEffect }  from 'react'
 import { useSelector } from 'react-redux';
 import HotelCard from './hotelCard';
-// import { Row, Col } from 'antd';
+import { useTransition, animated } from 'react-spring'
+import shuffle from 'lodash/shuffle'
+import {selectHotelList} from "./hotelsSlices";
 
+
+// import { Row, Col } from 'antd';
 export default function HotelList() {
     var hotels = useSelector(({hotels}) => hotels);
 
-    useEffect(() => {
-       hotels = hotels.sort((a, b)=> a.reviewRating.percentage > b.reviewRating.percentage)
-    }, [])
+    // useEffect(() => void setInterval(() => set(shuffle), 2000), [])
+    console.log(hotels);
+    console.log(hotels.hotelList)
+    
 
     return (
         <div>
-            {hotels.map((hotel) => 
-                <HotelCard hotel={hotel} />
+            {hotels.hotelList.map((hotel, i) => 
+                <HotelCard hotel={hotel} key={hotel.name} delay={i}/>
             )}
         </div>
     )
