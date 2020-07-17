@@ -11,6 +11,7 @@ export const trackerSlice = createSlice({
   reducers: {
       generateLog(state, action) {
           const newLog = {
+              
 
 
           }

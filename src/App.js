@@ -51,7 +51,7 @@ function App() {
       <Layout>
         <Header style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
           <div className="logo" >
-            <img height={65} src="https://storage.cloud.google.com/tripbigs/tripbigslogo.png?authuser=1&folder&organizationId" />
+            <img alt={"logo"} height={65} src={"https://storage.cloud.google.com/tripbigs/tripbigslogo.png?authuser=1&folder&organizationId"} />
           </div>
           <Menu theme="" mode="horizontal" defaultSelectedKeys={['1']}>
             <Menu.Item key="1"><Link to="/">Main</Link></Menu.Item>

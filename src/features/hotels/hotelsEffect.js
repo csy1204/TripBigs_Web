@@ -7,8 +7,8 @@ export function* fetchClickProbs() {
     put(getClickProbs());
     const predicts = yield call(api.getClickProbs);
     // console.log(predicts);
-    yield put(getClickProbsSuccess({predicts}))
-    yield put(sortByClickProb());
+    yield put(getClickProbsSuccess({predicts})) // 클릭 예측률 가져오기
+    yield put(sortByClickProb()); // 클릭 확률순 정렬
   } catch (err) {
       console.log(err);
       yield put(getClickProbsFailure(err));

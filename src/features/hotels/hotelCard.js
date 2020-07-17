@@ -4,7 +4,9 @@ import { Tabs } from 'antd';
 import styled from 'styled-components';
 import {
     DownOutlined,
-    UpOutlined
+    UpOutlined,
+    RightOutlined
+
 } from '@ant-design/icons';
 
 import InfoTab from "./InfoTab";
@@ -41,6 +43,12 @@ const HotelCardDiv = styled.div`
 
 const BestDealCard = styled.div`
     background-color: #ecf3e6;
+    padding: 8px;
+    min-height: 80px;
+    font-size: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 `;
 
 const NameSpan = styled.span`
@@ -60,6 +68,50 @@ const HotelImage = styled.img`
     height: 100%
 `
 
+const SelectButton = styled.button`
+    margin-left: auto;
+    padding: 4px 4px 4px 8px;
+    width: auto;
+    max-width: 100%;
+    color: #fff;
+    border-radius: 2px;
+    background-color: #428500;
+    border: 0;
+    font-size: 12px;
+    color: white;
+    font-weight: bold;
+`
+
+const PriceCardFooter = styled.div`
+    display: flex;
+    align-items: center;
+`
+
+
+const PriceCardInner = styled.div`
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    justify-content: space-between;
+    padding: 0 0 2px 0;
+`
+
+const CardFooter = styled.div`
+    background: white;
+    padding: 3px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+    font-weight: bold;
+`
+
+function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+
 const HotelCard = ({hotel, delay}) => {
     const [tabNum, setTabNum] = useState(false);
     const { TabPane } = Tabs;
@@ -75,34 +127,55 @@ const HotelCard = ({hotel, delay}) => {
                     <HotelImage alt={"placeholder"} src={"http:"+hotel.images[0].urls.preview} />
                 </Col>
                 <Col xs={14} lg={20} >
-                    <NameSpan>{hotel.name}</NameSpan>
-                    <p style={{fontSize:12}}>{hotel.type}</p>
-                    <p onClick={() => handleTabChange("3")} style={{fontSize:12, marginBottom: 2}}>
-                        <RatingSpan index={hotel.reviewRating.index}> 
-                            {hotel.reviewRating.percentage} 
-                        </RatingSpan>  
-                        <b>{hotel.overallLiking}</b> (후기 {hotel.partnerReviewCount}개)
-                    </p>
-                    <p onClick={() => handleTabChange("1")} style={{fontSize:12, marginBottom: 2}}>
-                        {hotel.address.street}
-                    </p>
-                    <BestDealCard onClick={() => handleTabChange("3")}>
-                        <b>아고다</b>
-                        <h3 style={{color:"#316300", fontWeight: 700, fontSize:14, marginBottom: 2}}>{hotel.price} 원</h3>
-                    </BestDealCard>
+                    <PriceCardInner>
+                        <div>
+                            <NameSpan>{hotel.name}</NameSpan>
+                            <p style={{fontSize:12}}>{hotel.type}</p>
+                            <p onClick={() => handleTabChange("3")} style={{fontSize:12, marginBottom: 2}}>
+                                <RatingSpan index={hotel.reviewRating.index}> 
+                                    {hotel.reviewRating.percentage} 
+                                </RatingSpan>  
+                                <b>{hotel.overallLiking}</b> (후기 {hotel.partnerReviewCount}개)
+                            </p>
+                            <p onClick={() => handleTabChange("1")} style={{fontSize:12, marginBottom: 2}}>
+                                {hotel.address.street}
+                            </p>
+                        </div>
+                        <BestDealCard onClick={() => handleTabChange("3")}>
+                            <div>
+                                <b>{hotel.price[1].site}</b>
+                            </div>
+                            <PriceCardFooter>
+                                <h3 style={{color:"#316300", fontWeight: 700, fontSize:14, marginBottom: 2}}>
+                                    {numberWithCommas(hotel.price[1].price)} 원
+                                </h3>
+                                
+                                    <SelectButton><a 
+                                        href={hotel.price[1].url} 
+                                        style={{textDecoration: "none", color:"white"}}
+                                        target="_blank"
+                                        >선택 <RightOutlined /></a></SelectButton>
+                                
+                            </PriceCardFooter>        
+                        </BestDealCard>   
+                    </PriceCardInner>                 
                 </Col>
             </Row>
             {tabNum ?
-                <Row onClick={() => setTabNum(false)} style={{background:"white", justifyContent: "flex-end", padding: "3px"}}>
-                    <UpOutlined/>
-                </Row>:<Row onClick={() => setTabNum("1")}  style={{background:"white", justifyContent: "flex-end", padding: "3px"}}>
-                    <DownOutlined />
+                <Row onClick={() => setTabNum(false)} >
+                    <CardFooter>
+                    <div>최저가: {numberWithCommas(hotel.price[0].price)} 원</div> <UpOutlined/>
+                    </CardFooter>
+                </Row>:<Row onClick={() => setTabNum("1")}>
+                    <CardFooter>
+                        <div>최저가: {numberWithCommas(hotel.price[0].price)} 원</div> <DownOutlined />
+                    </CardFooter>
                 </Row>   
             }
             <Divider style={{width: '100%', margin: 0}} />
             <Row style={{background:"white"}}>
                 {tabNum && 
-                <Tabs style={{width: '100%'}} defaultActiveKey="1" activeKey={tabNum} onChange={(key)=>handleTabChange(key)}>
+                <Tabs style={{width: '100%', margin: "0 0 8px 0 important!"}} defaultActiveKey="1" activeKey={tabNum} onChange={(key)=>handleTabChange(key)}>
                     <TabPane tab="  정보   " key="1" style={{padding: "6px"}}>
                         <InfoTab hname={hotel.name} hid={hotel.id} amenities={hotel.amenities}  />
                     </TabPane>
@@ -110,7 +183,7 @@ const HotelCard = ({hotel, delay}) => {
                         <ImgTab hid={hotel.id}/>
                     </TabPane>
                     <TabPane tab="  객실 요금   " key="3">
-                        <DealsTab />
+                        <DealsTab deals={hotel.price} />
                     </TabPane>
                 </Tabs>}
             </Row>

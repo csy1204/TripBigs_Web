@@ -25,22 +25,4 @@ export default {
             throw err
         }
     }
-    // getNewsEverything: (params) => {
-    //     params['apiKey'] = API_KEY
-    //     console.log(params)
-    //     return axios.get('everything',{params})
-    // },
-    // getHeadlines: async () => {
-    //     const params = {
-    //         'apiKey': API_KEY,
-    //         'country': 'kr'
-    //     }
-    //     try {
-    //         const newsResponse = await axios.get('top-headlines', {params});
-    //         return newsResponse.data.articles
-    //     } catch (err) {
-    //         throw err
-    //     }
-        
-    // }
 }
