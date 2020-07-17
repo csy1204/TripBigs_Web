@@ -24,3 +24,8 @@ yarn-error.log*
 
 __pycache__
 
+
+api/*.joblib
+api/*.log
+api/*.csv
+api/*.pkl

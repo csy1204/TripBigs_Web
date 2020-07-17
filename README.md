@@ -17,12 +17,13 @@ API
 
 - [o] Hotel Card Initial State 설정
 - [o] Card Component 구현
+
 - [ ] Price Dummy data
 - [ ] Tracking Feature 구현
 - [ ] GA 연결 
 - [ ] API와 연결
 
-- [ ] Sorting 필터 구현
+- [o] Sorting 필터 구현
 
 - [ ] 맛집 추천
 - [ ] Router 적용 - 만든이
@@ -41,8 +42,8 @@ API
 ## Todo
 <!-- 1. router
 2. 호텔 이름 변경 / 한국이름 -->
-3. sorting 필터
-4. flask - redis API
+<!-- 3. sorting 필터 -->
+<!-- 4. flask  API -->
 5. Tracking 구현
 6. API 연결
 7. 배포
