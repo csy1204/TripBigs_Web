@@ -113,9 +113,9 @@ import get from 'lodash/get'
 
 
 // Hotel List Sorting Function
-const sortFunction = (state, key, isAsec) => {
+const sortFunction = (hotelList, key, isAsec) => {
     const ascVar = isAsec === true ? -1 : 1;
-    return state.hotelList.slice().sort((a, b)=> {
+    return hotelList.slice().sort((a, b)=> {
         if (get(a,key) < get(b,key)) {
             return 1 * ascVar;
         }
@@ -126,37 +126,68 @@ const sortFunction = (state, key, isAsec) => {
     })
 }
 
+function startLoading(state) {
+    state.isLoading = true
+  }
+  
+function loadingFailed(state, action) {
+    state.isLoading = false
+    state.error = action.payload
+}
 
 const hotelsSlice = createSlice({
   name: 'hotels',
   initialState: {
       hotelList: initialHotelsState,
       filter: null,
+      isLoading: false,
+      error: null
   },
   reducers: {
     sortByPrice(state, action) {
         return {...state,
-            hotelList: sortFunction(state, "price", true)
+            hotelList: sortFunction(state.hotelList, "price", true)
         }
     },
     sortByRating(state, action) {
         return {...state,
-            hotelList: sortFunction(state, "reviewRating.percentage", false)
+            hotelList: sortFunction(state.hotelList, "reviewRating.percentage", false)
         }
+    },
+    getClickProbs: startLoading,
+    getClickProbsSuccess(state, {payload}) {
+        const { predicts } = payload
+        state.isLoading = false
+        state.error = null
+
+        for (var i in state.hotelList) {
+            console.log(state.hotelList[i].clickProb, predicts[i])
+            state.hotelList[i].clickProb = predicts[i]
+        }
+
+        // state.hotelList.forEach((hotel, index) => {
+        //     hotel
+        // })
+        // const newhotellist = produce(state.hotelList, draft => {
+        //     for (var i in draft) {
+        //         console.log(draft[i].clickProb, predicts[i])
+        //         draft[i].clickProb = predicts[i]
+        //     }
+        // })
+        // console.log("new", newhotellist)
+
+        // return {...state,
+        //     hotelList: newhotellist
+        // }
+    },
+    getClickProbsFailure: loadingFailed,
+    sortByClickProb(state, action) {
+        return { ...state,
+        hotelList: sortFunction(state.hotelList, "clickProb", false)}
     }
   },
-  extraReducers: {
-      "SORT_BY_RATING": (state, action) => {
-          return state.hotelList.slice().sort((a, b)=> a.reviewRating.percentage > b.reviewRating.percentage);
-      }
-  }
 })
 
-export const { sortByPrice, sortByRating } = hotelsSlice.actions;
-console.log("aaa", initialHotelsState.map((h) => h.name));
-
-console.log(get(initialHotelsState[0], "reviewRating.percentage"))
-
-export const selectHotelList = state => state.hotelList;
+export const { sortByPrice, sortByRating, getClickProbs, getClickProbsSuccess, getClickProbsFailure, sortByClickProb } = hotelsSlice.actions;
 
 export default hotelsSlice.reducer
