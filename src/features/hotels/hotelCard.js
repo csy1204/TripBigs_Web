@@ -8,6 +8,13 @@ import {
     RightOutlined
 
 } from '@ant-design/icons';
+import {
+    Switch,
+    Route,
+    Link,
+    useRouteMatch,
+    useParams
+  } from "react-router-dom";
 
 import InfoTab from "./InfoTab";
 import ImgTab from "./ImgTab";
@@ -121,7 +128,7 @@ const HotelCard = ({hotel, delay}) => {
     }
 
     return (
-        <HotelCardDiv className={'animate__animated animate__fadeInUp'}>
+        <HotelCardDiv>
             <Row style={{background:"white"}}>
                 <Col xs={10} lg={4} style={{padding:"2px"}} onClick={() => handleTabChange("2")} >
                     <HotelImage alt={"placeholder"} src={"http:"+hotel.images[0].urls.preview} />
@@ -141,6 +148,7 @@ const HotelCard = ({hotel, delay}) => {
                                 {hotel.address.street}
                             </p>
                         </div>
+                        <Link to={`/location/${hotel.name}`}>맛집 추천 받기</Link>
                         <BestDealCard onClick={() => handleTabChange("3")}>
                             <div>
                                 <b>{hotel.price[1].site}</b>

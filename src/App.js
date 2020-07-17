@@ -11,6 +11,7 @@ import {
 } from "react-router-dom";
 
 import api from "./lib/api";
+import Location from "./pages/Location"
 
 const { Header, Content, Footer } = Layout;
 
@@ -64,8 +65,8 @@ function App() {
           <Route path="/about">
             <About />
           </Route>
-          <Route path="/members">
-            <Users />
+          <Route path="/location/:locationName">
+            <Location />
           </Route>
           <Route path="/">
             <Home />
