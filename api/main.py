@@ -1,27 +1,17 @@
-import time
-from flask import Flask, request
+from typing import List, Optional
+from enum import Enum
 
-
-app = Flask(__name__, static_folder='../build', static_url_path='/')
-
-
-# @app.route('/')
-# def index():
-#     return app.send_static_file('index.html')
-
-# @app.route('/time')
-# def get_current_time():
-#     return {'time': time.time()}
-
-# if __name__ == '__main__':
-#     app.run(host='0.0.0.0', debug=True
-# 
-# )
-
+from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
+from pydantic import BaseModel
 
 import logging
 import warnings
 warnings.filterwarnings('ignore')
+
+app = FastAPI()
+app.mount("/", StaticFiles(directory="../build"), name="build")
+
 
 import gc
 import glob
@@ -657,7 +647,6 @@ def predict(data):
     print(pred)
     return pred
 
-
 from multiprocessing import Pool
 
 df_feat = None
@@ -666,7 +655,7 @@ vectorizer = None
 def f(x):
     return vectorizer.steps[1][-1].transformers[x[0]][1].transform(df_feat[x[1]])
 
-def predict3(data, session_id):
+def predict3(data):
     global df_feat
     global vectorizer
     data = pd.DataFrame(data)
@@ -683,7 +672,7 @@ def predict3(data, session_id):
     vectorizer = make_vectorizer_1()
 
     df2 = pd.DataFrame(feats2).reset_index(drop=True)
-    feat_gen_file = f"{session_id}.csv"
+    feat_gen_file = "session_rt_02.csv"
     df2.to_csv(feat_gen_file,index=False)
     df_to_fit = pd.read_csv(feat_gen_file)
     df_to_fit2 = df_to_fit.copy()
@@ -695,6 +684,8 @@ def predict3(data, session_id):
         # print(i, type(cols))
         vectorizer.steps[1][-1].transformers[i][1].fit(df_feat[cols])
     
+    df_to_fit = df_to_fit2
+    df_feat = vectorizer.steps[0][-1].transform(df_to_fit)
     
     with Pool(5) as p:
         mat_arr = p.map(f, [(i, cols) for i, (_, cols) in enumerate(col_p_props)])
@@ -744,6 +735,7 @@ def predict3(data, session_id):
     print(pred)
     return pred
 
+
 def get_logger(filename="api.log"):
     file_handler = logging.FileHandler(filename=filename)
     stdout_handler = logging.StreamHandler(sys.stdout)
@@ -758,18 +750,59 @@ def get_logger(filename="api.log"):
 
 logger = get_logger()
 
-@app.route('/time')
-def get_current_time():
-    return {'time': time.time()}
 
-@app.route('/predict', methods=['GET', 'POST'])
-def get_predict():
-    data = request.get_json()
-    print(data)
-    logs_arr = data["logs"]
-    session_id = data["sid"]
-    result = predict3(logs_arr,session_id)
-    return {'predict': result.tolist()[-25:]}
+class Log(BaseModel):
+    user_id: str
+    session_id: str
+    timestamp: int
+    step: int
+    action_type: str
+    reference: Optional[str] = None
+    platform: Optional[str] = "KR"
+    city: str
+    device: Optional[str] = "desktop"
+    current_filters: Optional[str] = None
+    impressions: Optional[str] = None
+    prices: Optional[str] = None
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True)
+class LogList(BaseModel):
+    logs: List[Log]
+
+app = FastAPI()
+
+class ModelName(str, Enum):
+    alexnet = "alexnet"
+    resnet = "resnet"
+    lenet = "lenet"
+
+@app.post("/log")
+async def create_log(logs: LogList):
+    # logger.info(len(logs))
+    logger.info(logs.dict())
+    result = await predict3(logs.dict()["logs"])
+    logger.info(result.shape)
+    return {"predict": result.tolist()}
+
+
+@app.get("/location/{location_id}")
+async def root(location_id: int):
+    logger.info(accs[0].acc)
+    logger.info(accs[1].acc)
+    return {"message": f"Hello World {location_id}"}
+
+
+@app.get("/model/{model_name}")
+async def get_model(model_name: ModelName):
+    if model_name == ModelName.alexnet:
+        return {"model_name": model_name, "message": "Deep Learning FTW!"}
+
+    if model_name.value == "lenet":
+        return {"model_name": model_name, "message": "LeCNN all the images"}
+
+    return {"model_name": model_name, "message": "Have some residuals"}
+
+
+@app.get("/rank/")
+async def root(top_n: int = 25, q: Optional[str] = None):
+    return {"top": top_n}
+
