@@ -1,5 +1,5 @@
 import React from 'react'
-import { Row, Col, Button, Card } from 'antd';
+import { Row, Col, Card } from 'antd';
 import styled from 'styled-components';
 
 

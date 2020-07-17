@@ -1,6 +1,6 @@
 import React from 'react'
 import { Menu, Button, Dropdown } from 'antd';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import {
     FilterOutlined,
 } from '@ant-design/icons';

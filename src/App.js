@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
 import ReactGA from "react-ga";
-import { Layout, Menu, Row, Col, Button } from 'antd';
+import { Layout, Menu } from 'antd';
 import Home from "./pages/Home";
 import {
   BrowserRouter as Router,
@@ -9,6 +9,8 @@ import {
   Route,
   Link
 } from "react-router-dom";
+
+import api from "./lib/api";
 
 const { Header, Content, Footer } = Layout;
 
@@ -31,9 +33,16 @@ function App() {
 
   useEffect(() => {
     ReactGA.pageview(window.location.pathname)
-    fetch('/time').then(res => res.json()).then(data => {
+
+    const fetch = async () => {
+      const { data } = await api.getTime();
+      console.log(data);
       setCurrentTime(data.time);
-    });
+
+    }
+
+    fetch();
+    
   }, []);
 
   return (
@@ -42,7 +51,7 @@ function App() {
       <Layout>
         <Header style={{ position: 'fixed', zIndex: 1, width: '100%' }}>
           <div className="logo" >
-            TripBigs
+            <img height={65} src="https://storage.cloud.google.com/tripbigs/tripbigslogo.png?authuser=1&folder&organizationId" />
           </div>
           <Menu theme="" mode="horizontal" defaultSelectedKeys={['1']}>
             <Menu.Item key="1"><Link to="/">Main</Link></Menu.Item>
@@ -66,6 +75,7 @@ function App() {
         <Footer style={{ textAlign: 'center' }}>Ant Design ©2018 Created by Ant UED</Footer>
       </Layout>
     </div>
+    <p>{currentTime}</p>
     </Router>
   );
 }
