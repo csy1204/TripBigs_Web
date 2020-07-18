@@ -1,5 +1,6 @@
 import React, { useState }  from 'react'
 import { Row, Col, Button, Divider } from 'antd';
+import { useSelector, useDispatch } from 'react-redux';
 import { Tabs } from 'antd';
 import styled from 'styled-components';
 import {
@@ -19,6 +20,7 @@ import {
 import InfoTab from "./InfoTab";
 import ImgTab from "./ImgTab";
 import DealsTab from "./DealsTab";
+import { generateLog } from "../tracker/trackerSlice"
 
 const ratingColorIndex = {
     5: "#316300", // 최고 좋음
@@ -41,8 +43,6 @@ const RatingSpan = styled.span`
     height: 18px;
     border-radius: 18px;
 `;
-
-
 
 const HotelCardDiv = styled.div`
     margin-bottom: 10px;    
@@ -94,7 +94,6 @@ const PriceCardFooter = styled.div`
     align-items: center;
 `
 
-
 const PriceCardInner = styled.div`
     display: flex;
     flex-direction: column;
@@ -119,18 +118,31 @@ function numberWithCommas(x) {
 }
 
 
-const HotelCard = ({hotel, delay}) => {
+const HotelCard = ({hotel, imps, prices}) => {
     const [tabNum, setTabNum] = useState(false);
     const { TabPane } = Tabs;
+    const dispatch = useDispatch();
 
     const handleTabChange = (key) => {
         key===tabNum?setTabNum(false):setTabNum(key)
     }
 
+    
+
+    const handleLog = (action_type) => {
+        const data = {
+            action_type,
+            reference: hotel.id,
+            impressions: imps,
+            prices: prices
+        }
+        dispatch(generateLog(data));
+    }
+
     return (
         <HotelCardDiv>
             <Row style={{background:"white"}}>
-                <Col xs={10} lg={4} style={{padding:"2px"}} onClick={() => handleTabChange("2")} >
+                <Col xs={10} lg={4} style={{padding:"2px"}} onClick={() => { handleLog("interaction item image"); handleTabChange("2") }} >
                     <HotelImage alt={"placeholder"} src={"http:"+hotel.images[0].urls.preview} />
                 </Col>
                 <Col xs={14} lg={20} >
@@ -138,18 +150,18 @@ const HotelCard = ({hotel, delay}) => {
                         <div>
                             <NameSpan>{hotel.name}</NameSpan>
                             <p style={{fontSize:12}}>{hotel.type}</p>
-                            <p onClick={() => handleTabChange("3")} style={{fontSize:12, marginBottom: 2}}>
+                            <p onClick={() => {handleLog('interaction item deals'); handleTabChange("3")}} style={{fontSize:12, marginBottom: 2}}>
                                 <RatingSpan index={hotel.reviewRating.index}> 
                                     {hotel.reviewRating.percentage} 
                                 </RatingSpan>  
                                 <b>{hotel.overallLiking}</b> (후기 {hotel.partnerReviewCount}개)
                             </p>
-                            <p onClick={() => handleTabChange("1")} style={{fontSize:12, marginBottom: 2}}>
+                            <p onClick={() => {handleLog('interaction item info'); handleTabChange("1")}} style={{fontSize:12, marginBottom: 2}}>
                                 {hotel.address.street}
                             </p>
                         </div>
                         <Link to={`/location/${hotel.name}`}>맛집 추천 받기</Link>
-                        <BestDealCard onClick={() => handleTabChange("3")}>
+                        <BestDealCard onClick={() => {handleLog('interaction item deals'); handleTabChange("3")}}>
                             <div>
                                 <b>{hotel.price[1].site}</b>
                             </div>
@@ -161,6 +173,7 @@ const HotelCard = ({hotel, delay}) => {
                                     <SelectButton><a 
                                         href={hotel.price[1].url} 
                                         style={{textDecoration: "none", color:"white"}}
+                                        onClick={()=>handleLog('clickout item')}
                                         target="_blank"
                                         >선택 <RightOutlined /></a></SelectButton>
                                 
@@ -174,7 +187,7 @@ const HotelCard = ({hotel, delay}) => {
                     <CardFooter>
                     <div>최저가: {numberWithCommas(hotel.price[0].price)} 원</div> <UpOutlined/>
                     </CardFooter>
-                </Row>:<Row onClick={() => setTabNum("1")}>
+                </Row>:<Row onClick={() => {handleLog('interaction item info');setTabNum("1")}}>
                     <CardFooter>
                         <div>최저가: {numberWithCommas(hotel.price[0].price)} 원</div> <DownOutlined />
                     </CardFooter>

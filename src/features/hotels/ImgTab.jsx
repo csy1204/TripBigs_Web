@@ -1,8 +1,10 @@
-import React from 'react'
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import styled from 'styled-components';
+import { generateLog } from "../tracker/trackerSlice";
 
 const imgContainer = styled.div`
     display: flex;
@@ -10,6 +12,19 @@ const imgContainer = styled.div`
 `
 
 export default function ImgTab({hid}) {
+    const trackerState = useSelector((tracker) => tracker);
+    const dispatch = useDispatch();
+
+    const handleLog = (action_type) => {
+        const data = {
+            action_type,
+            reference: hid,
+            impressions: trackerState.impressions,
+            prices: trackerState.prices,
+        }
+        dispatch(generateLog(data));
+    }
+
     var settings = {
         dots: true,
         infinite: true,
@@ -18,6 +33,7 @@ export default function ImgTab({hid}) {
         slidesToScroll: 1,
         arrows: true,
         onSwipe: (key) => {
+            handleLog('interaction item image');
             console.log(key, "swipe");
         }
       };
