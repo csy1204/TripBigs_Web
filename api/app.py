@@ -683,7 +683,7 @@ def predict3(data, session_id):
     vectorizer = make_vectorizer_1()
 
     df2 = pd.DataFrame(feats2).reset_index(drop=True)
-    feat_gen_file = f"{session_id}.csv"
+    feat_gen_file = "{}.csv".format(session_id)
     df2.to_csv(feat_gen_file,index=False)
     df_to_fit = pd.read_csv(feat_gen_file)
     df_to_fit2 = df_to_fit.copy()
