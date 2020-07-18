@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button } from 'antd';
+import { Modal, Button } from 'antd';
 import { useDispatch, useSelector } from 'react-redux'
 import {
   ShareAltOutlined
@@ -8,7 +8,7 @@ import { getClickProbs } from "./hotelsSlices";
 
 export default function AIButton() {
     const dispatch = useDispatch();
-    const state = useSelector(({hotels}) => hotels)
+    const state = useSelector(({hotels}) => hotels);
 
     return (
         <Button loading={state.isLoading}  onClick={()=>{dispatch(getClickProbs())}}> 
