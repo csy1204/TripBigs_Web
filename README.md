@@ -8,6 +8,11 @@
 2. 호텔 기반 맛집 추천 모델은 오토인코더, 협업필터링, DeepFM, Wide&Deep 모델이 사용되었으며, 로컬 맛집과 외국인을 위한 맛집을 구분한 것이 특징입니다. 로컬 맛집의 경우 이전 히스토리를 선택할 수 있는 옵션을 제공합니다.
 3. Session 기반 추천순 정렬을 이용할 시 Redux-Saga를 이용한 비동기 통신 제어를 하였으며, 전반적으로 Redux를 통한 상태관리르 구현하였습니다.
 
+### Architecture
+
+
+![](https://user-images.githubusercontent.com/18041103/94909282-e7e8a880-04dd-11eb-844c-ca2c5f41fecd.png)
+
 
 ### 스크린샷
 
